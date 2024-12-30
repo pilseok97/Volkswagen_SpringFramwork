@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.mapper.MemberMapper">
+	<!-- 로그인 -->
+	<select id="userIdCheck" resultType="org.zerock.domain.MemberVO">
+		select * from volkswagen_member where id = #{id}
+	</select>
+	
+	<!-- 회원정보 하나 가져오기 -->
+	<select id="getMember" resultType="org.zerock.domain.MemberVO">
+		select * from volkswagen_member where num = #{num}
+	</select>
+	
+	<!-- 비밀번호 체크 -->
+	<select id="getCheckPassword" resultType="String">
+		select password from volkswagen_member where num = #{num}
+	</select>
+	
+	<!-- 회원정보 수정하기 -->
+	<update id="updateMemberInfo">
+		update volkswagen_member
+		set tel=#{tel}, address=#{address}, email=#{email}
+		where num=#{num}
+	</update>
+	
+	<!-- 비밀번호 수정하기 -->
+	<update id="changePassword">
+		update volkswagen_member
+		set password=#{newpass}
+		where num=#{num}
+	</update>
+	
+	<!-- 회원탈퇴 -->
+	<delete id="deleteMember">
+		delete from volkswagen_member
+		where num=#{num}
+	</delete>
+	
+	<!-- 아이디 중복체크 -->
+	<select id="idcheckPost" resultType="String">
+		select id from volkswagen_member
+		where id=#{id}
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="signup">
+		INSERT INTO volkswagen_member 
+		VALUES (volkswagen_member_sql.nextval,#{id},#{password},#{name},#{gender},#{birth_day},#{tel},#{email},sysdate,#{address},'User','예약정보없음','예약정보없음',0,0)
+	</insert>
+</mapper>
