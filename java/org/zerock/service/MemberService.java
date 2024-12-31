@@ -26,4 +26,13 @@ public interface MemberService {
 	
 	// 회원가입
 	public int signup(MemberVO mvo);
+	
+	// 아이디 찾기
+	public String searchId(String name, String email); 
+	
+	// 비밀번호 찾기
+	public String searchPwd(String name, String email, String id);
+	
+	
+	
 }

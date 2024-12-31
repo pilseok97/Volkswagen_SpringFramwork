@@ -67,9 +67,27 @@ public class MemberPageController {
 		log.info("searchid");
 	}
 	
+	@PostMapping("/searchid")
+	public String searchid(@ModelAttribute MemberVO mvo, Model model) {
+		log.info("파라미터 담은 값"+mvo);
+		String searchId = service.searchId(mvo.getName(), mvo.getEmail());
+		log.info(searchId);
+		model.addAttribute("mvo", mvo);
+		model.addAttribute("searchId", searchId);
+		return "/memberPage/searchid";
+	}
+	
 	@GetMapping("/searchpwd")
 	public void searchpw() {
 		log.info("searchpwd");
+	}
+	
+	@PostMapping("/searchpwd")
+	public String searchpwd(@ModelAttribute MemberVO mvo, Model model) {
+		String searchPwd = service.searchPwd(mvo.getName(), mvo.getEmail(), mvo.getId());
+		model.addAttribute("mvo", mvo);
+		model.addAttribute("searchPwd", searchPwd);
+		return "/memberPage/searchpwd";
 	}
 	
 	@GetMapping("/signup")

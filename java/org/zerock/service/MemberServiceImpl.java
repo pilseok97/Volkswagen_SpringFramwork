@@ -77,6 +77,18 @@ public class MemberServiceImpl implements MemberService{
 		int count = mapper.signup(mvo);
 		return count;
 	}
+
+	@Override
+	public String searchId(String name, String email) {
+		String searchId = mapper.searchId(name, email);
+		return searchId;
+	}
+
+	@Override
+	public String searchPwd(String name, String email, String id) {
+		String searchPwd = mapper.searchPwd(name, email, id);
+		return searchPwd;
+	}
 	
 	
 	

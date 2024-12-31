@@ -28,5 +28,10 @@ public interface MemberMapper {
 	// 회원가입
 	public int signup(MemberVO mvo);
 	
+	// 아이디 찾기
+	public String searchId(@Param("name") String name,@Param("email") String email);
+	
+	// 비밀번호 찾기
+	public String searchPwd(@Param("name") String name,@Param("email") String email,@Param("id") String id);
 	
 }

@@ -90,7 +90,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="/contentsPage/service">
+						<a href="/contentsPage/serviceMain">
 							<img src="/resources/images/contents/icon5_service.png" alt="shortcut_icons05">
 							<p><span class="korean_text">서비스</span></p>
 						</a>

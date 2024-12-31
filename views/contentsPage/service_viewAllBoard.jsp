@@ -169,7 +169,7 @@
 				<td><span class="special_text">2024-00-00</span></td>
 			</tr>
 			<!-- 리스트 표시 부분 -->
-			<c:if test="${msg != 99 }">
+			<c:if test="${msg == null }">
 				<c:forEach var="bean" items="${boardList }">
 					<tr>
 						<td>
@@ -193,7 +193,11 @@
 							</a>
 						</td>
 						<td><span class="korean_text">${bean.writer }</span></td>
-						<td><span class="special_text">${bean.regdate }</span></td>
+						<td>
+							<span class="special_text"> 
+								<fmt:formatDate value="${bean.regdate}" pattern="yyyy-MM-dd" />
+							</span>
+						</td>
 					</tr>
 				</c:forEach>
 			</c:if>
@@ -290,10 +294,10 @@ window.addEventListener("beforeunload", function() {
 function loginError(){
 	if(${empty loginUser} ){
 		if(confirm('로그인 해주세요')){
-			location.href='<%= request.getContextPath() %>/login.do';
+			location.href='/memberPage/login';
 		}
 	}else{
-		location.href='<%=request.getContextPath()%>/boardform.do';
+		location.href='contentsPage/writeInquiryBoard';
 	}
 }
 $(document).ready(function() {

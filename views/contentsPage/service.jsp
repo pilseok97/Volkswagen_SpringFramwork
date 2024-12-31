@@ -1,13 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%
-	String content = request.getParameter("content");
-	if(content == null || content == ""){
-		response.sendRedirect("/");
-		return;
-	}
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

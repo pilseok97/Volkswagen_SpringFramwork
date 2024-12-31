@@ -115,20 +115,20 @@
 			<ul>
 				<li>
 					<label for="name"> 이름 : </label>
-					<input type="text" name="name"  value="${param.name }"  oninput="number(this); english(this); special(this);" id="name" required>
+					<input type="text" name="name"  value="${mvo.name }"  oninput="number(this); english(this); special(this);" id="name" required>
 					<label for="email"> 이메일 : </label>
-					<input type="email" name="email"  value="${param.email }"  oninput="korean(this)"  id="email"  required/>
+					<input type="email" name="email"  value="${mvo.email }"  oninput="korean(this)"  id="email"  required/>
 				</li>
 				<li>
 					<input type="submit" value="아이디 찾기"  /> 
-					<c:if test="${empty param.name or empty param.email}">
-				        <p>이름과 이메일을 입력해주세요</p>
+					<c:if test="${empty mvo.name or empty mvo.email}">
+				        <p>정보를 입력해주세요</p>
 				    </c:if>
-				    <c:if test="${mvo.id == null and not empty param.name and not empty param.email}">
-				        <p>회원가입 이력이 없습니다.</p>
+				    <c:if test="${searchId == null and not empty mvo.name and not empty mvo.email}">
+				        <p>회원가입 이력이 없습니다. 정보를 다시 확인해 주세요.</p>
 				    </c:if>
-					<c:if test="${mvo != null }">
-						<p>가입하신 아이디는 <b>${mvo.id }</b> 입니다.</p>
+					<c:if test="${searchId != null }">
+						<p>가입하신 아이디는 <b>${searchId }</b> 입니다.</p>
 						<input type="button" onclick="self.close();" value="로그인 페이지로 이동"/>
 					</c:if>
 				</li>
