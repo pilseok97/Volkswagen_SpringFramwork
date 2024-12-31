@@ -49,4 +49,21 @@
 		INSERT INTO volkswagen_member 
 		VALUES (volkswagen_member_sql.nextval,#{id},#{password},#{name},#{gender},#{birth_day},#{tel},#{email},sysdate,#{address},'User','예약정보없음','예약정보없음',0,0)
 	</insert>
+	
+	<!-- 아이디 찾기 -->
+	<select id="searchId" resultType="String">
+		select id from volkswagen_member
+		where name=#{name} and email=#{email}
+	</select>
+
+	<!-- 비밀번호 찾기 -->
+	<select id="searchPwd" resultType="String">
+		select password from volkswagen_member
+		where name=#{name} and email=#{email} and id=#{id}
+	</select>
+	
+	
+	
+	
+	
 </mapper>
