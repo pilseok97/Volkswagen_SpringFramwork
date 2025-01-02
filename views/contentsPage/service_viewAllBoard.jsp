@@ -181,7 +181,7 @@
 							</c:if>
 						</td>
 						<td>
-							<a href="boardview.do?seq=${bean.seq }&pageNum=${param.pageNum}"> 
+							<a class="move" href="boardview.do?seq=${bean.seq }"> 
 								<span class="korean_text"> 
 									<c:if test="${bean.secret == 0 }">
 										${bean.title }
@@ -214,7 +214,7 @@
 			<tr>
 				<td colspan="4" style="border-bottom: none;">
 					<div class="board_footer w1300">
-						<%-- <!-- 필드 기본값 받기 -->
+						<!-- 필드 기본값 받기 -->
 						<c:set var="selectedField" value="${param.searchField}" />
 						<!-- 검색폼 -->
 						<form action="boardsearch.do" class="search_container" method="get">
@@ -228,7 +228,7 @@
 							<button type="submit" id="searchButton">
 								<img src="/resources/images/contentsPage/service/search.png" alt="돋보기 아이콘">
 							</button>
-						</form> --%>
+						</form>
 						<!-- 비회원, 관리자는 글쓰기 불가 -->
 						<c:if test="${!loginUser.grade.equals('Admin') }">
 			                  <!-- 글쓰기 버튼 -->
@@ -236,49 +236,32 @@
 						</c:if>
 					</div> 
 					<br> 
-					<%-- <!-- 페이징, 카운터 -->
-					<p>
-						<!-- 글목록 컨트롤러에서 넘어온 데이터들 사용 -->
-						<c:if test="${count > 0}">
-							<!-- 페이지 갯수 계산 -->
-							<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
-							<c:set var="pageBlock" value="${10}" />
-							<c:choose>
-								<c:when test="${currentPage % pageBlock == 0}">
-									<fmt:parseNumber var="result" value="${(currentPage / pageBlock) - 1}" integerOnly="true" />
-									<c:set var="startPage" value="${Math.max(result * pageBlock + 1, 1)}" />
-								</c:when>
-								<c:otherwise>
-									<fmt:parseNumber var="result" value="${currentPage / pageBlock}" integerOnly="true" />
-									<c:set var="startPage" value="${result * pageBlock + 1}" />
-								</c:otherwise>
-							</c:choose>
-							<!-- endPage = 화면에 보여질 마지막 페이지 번호 -->
-							<c:set var="endPage" value="${startPage + pageBlock - 1}" />
-							<c:if test="${endPage > pageCount}">
-								<c:set var="endPage" value="${pageCount}" />
+<!-- #a.페이징 = 번호 출력 
+	(작동플로우)
+	 a. BoardController에서 PageDTO를 pageMaker에 담아서 보냄 => 화면에 페이지 번호들이 계산된 결과에 의해 출력
+	    (예) 현재 total이 123이므로 아래 페이징 숫자가 계산된 결과에 의해 출력됨 -->
+					<div class="pull-right">
+						<ul class="pagination">
+							<c:if test="${pageMaker.prev }">
+								<li class="paginate_button previous">
+									<a href="${pageMaker.startPage -1 }"> << </a>
+								</li>
 							</c:if>
-							<!-- 이전 버튼 -->
-							<c:if test="${startPage > 1}">
-								<a href="${servlet_location }?pageNum=${startPage - 1}&tab=1&searchField=${param.searchField }&searchText=${param.searchText}">[이전]</a>
-							</c:if>
-							<!-- 페이지 번호 -->
-							<c:forEach var="i" begin="${startPage}" end="${endPage}">
-								<c:choose>
-									<c:when test="${i == currentPage}">
-										<a href="${servlet_location }?pageNum=${i}&tab=1&searchField=${param.searchField }&searchText=${param.searchText}" class="current">[${i}]</a>
-									</c:when>
-									<c:otherwise>
-										<a href="${servlet_location }?pageNum=${i}&tab=1&searchField=${param.searchField }&searchText=${param.searchText}">[${i}]</a>
-									</c:otherwise>
-								</c:choose>
+							<c:forEach var="num" begin="${pageMaker.startPage }" end="${pageMaker.endPage }">
+								<li class='paginate_button ${pageMaker.cri.pageNum == num ? "active":"" } '>
+									<a href="${num }">${num }</a>
+								</li>
 							</c:forEach>
-							<!-- 다음 버튼 -->
-							<c:if test="${endPage < pageCount}">
-								<a href="${servlet_location }?pageNum=${endPage + 1}&tab=1&searchField=${param.searchField }&searchText=${param.searchText}">[다음]</a>
+							<c:if test="${pageMaker.next }">
+								<li class="paginate_button next"><a href="${pageMaker.endPage +1 }"> >> </a></li>
 							</c:if>
-						</c:if>
-					</p> --%>
+						</ul>
+					</div> <!-- /#a.페이징 = 번호 출력 = --> <!-- #b. 페이징 = 실제페이지 클릭시 동작 => 아래 자바스크립와 연동하여 처리 -->
+					<form action="/contentsPage/viewAllBoard" id="actionForm" method="get">
+						<input type="hidden" name="pageNum" value='${pageMaker.cri.pageNum }'> 
+						<input type="hidden" name="amount" value='${pageMaker.cri.amount }'>
+						 <input type="hidden" name="tab" id="tab" value="1">
+					</form> <!-- /#b. 페이징 = 실제페이지 클릭시 동작 -->
 				</td>
 			</tr>
 		</tbody>
@@ -306,6 +289,25 @@ $(document).ready(function() {
         $(this).next().stop().toggle();
         $(this).children().toggleClass("clicked");
     });
+
+	/* 페이지 번호 클릭시 처리 스크립트 */
+	var actionForm = $("#actionForm");
+	$(".paginate_button a").on('click',function(e){
+		e.preventDefault();
+		// pageNum에 클릭된 페이지번호 값 넣기 = 2클릭시 pageNum=2 나옴
+		actionForm.find("input[name='pageNum']").val($(this).attr("href"));
+		actionForm.submit();
+	});
+	
+	// http://localhost:8090/board/get?pageNum=1&amount=10&bno=26
+	$(".move").on('click',function(e){
+		e.preventDefault();
+		actionForm.append("<input type='hidden' name='bno' value='" 
+				+ $(this).attr("href")+ "'>");
+		actionForm.attr("action","/board/get");
+		actionForm.submit();
+	});
+
 });
 </script>
 

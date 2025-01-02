@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
+import org.zerock.domain.PageDTO;
 import org.zerock.service.ContentsPageService;
 
 import lombok.extern.log4j.Log4j;
@@ -48,15 +50,16 @@ public class ContentsPageController {
 	}
 	
 	@GetMapping("/viewAllBoard")
-	public String viewAllBoard(@RequestParam(value = "tab", required = false, defaultValue = "1") String tab, @RequestParam(value = "pageNum", required = false, defaultValue = "1") String pageNum, Model model) {
-		List<BoardVO> list = service.getAllList();
+	public String viewAllBoard(@RequestParam(value = "tab", required = false, defaultValue = "1") String tab, Criteria cri, Model model) {
+		List<BoardVO> list = service.getListWithPaging(cri);
+		int total = service.getTotalCount(cri);
 	    String content = "service_viewAllBoard.jsp";
 	    
 		// 공통 데이터를 모델에 추가
 	    model.addAttribute("boardList", list);
 	    model.addAttribute("content", content);
+	    model.addAttribute("pageMaker", new PageDTO(cri, total));
 	    model.addAttribute("tab", tab);
-	    model.addAttribute("pageNum", pageNum);
 		
 	    return "/contentsPage/service";
 	}

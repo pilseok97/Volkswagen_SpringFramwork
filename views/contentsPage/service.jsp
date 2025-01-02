@@ -77,30 +77,30 @@
 	<script src="/resources/js/aside.js"></script>
 <script>
 	$(document).ready(function() {
-		/* const fromServlet = "${fromServlet != null ? 'true' : 'false'}" === 'true';
-		const section = "${section != null ? section : ''}";
-		const scrollPosition = "${scrollPosition != null ? scrollPosition : 'null'}"; // 서블릿에서 전달된 스크롤 위치 값 */
+		$(document).ready(function () {
+		    // 현재 페이지가 서비스 페이지인지 확인
+		    const isServicePage = location.pathname.includes("/contentsPage");
 
-		/* // 스크롤 위치 복원 로직
-		if (scrollPosition !== 'null' && scrollPosition !== 'session') {
-			// 서블릿에서 지정된 스크롤 위치로 이동
-			window.scrollTo(0, parseInt(scrollPosition, 10));
-		} else if (scrollPosition === 'session') {
-			// scrollPosition이 "session"일 때 세션스토리지 값을 사용하여 스크롤 위치 복원
-			const savedScrollPosition = sessionStorage.getItem("scrollPosition");
-			if (savedScrollPosition !== null) {
-				window.scrollTo(0, parseInt(savedScrollPosition, 10));
-			}
-		} else {
-			// sessionStorage에 저장된 스크롤 위치가 있으면 해당 위치로 복원
-			const savedScrollPosition = sessionStorage.getItem("scrollPosition");
-			if (savedScrollPosition !== null && fromServlet) {
-				window.scrollTo(0, parseInt(savedScrollPosition, 10));
-			} else if (!fromServlet) {
-				// 외부에서 처음 진입 시 스크롤을 (0,0)으로 초기화
-				window.scrollTo(0, 0);
-			}
-		} */
+		    if (isServicePage) {
+		        const scrollPosition = sessionStorage.getItem("scrollPosition");
+
+		        if (document.referrer && !document.referrer.includes("/contentsPage")) {
+		            // 다른 페이지에서 진입한 경우: 항상 스크롤 초기화
+		            window.scrollTo(0, 0);
+		        } else if (scrollPosition) {
+		            // 저장된 스크롤 위치가 있는 경우 복원
+		            window.scrollTo(0, parseInt(scrollPosition, 10));
+		        }
+		    }
+
+		    // 페이지를 떠날 때 현재 스크롤 위치 저장
+		    window.addEventListener("beforeunload", function () {
+		        if (isServicePage) {
+		            sessionStorage.setItem("scrollPosition", window.scrollY);
+		        }
+		    });
+		});
+
 
 		// 탭 설정 로직
 		const urlParams = new URLSearchParams(window.location.search);

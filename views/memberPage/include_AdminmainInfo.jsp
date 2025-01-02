@@ -86,43 +86,7 @@ button:hover {
 				                   </a>
 				                </form>
 						<!-- 페이징, 카운터 -->
-						<p>
-							<!-- 글목록 컨트롤러에서 넘어온 데이터들 사용 -->
-							<c:if test="${count > 0 }"> <!-- 총글갯수가 있으면 -->
-								<!-- 페이지 갯수 계산 -->
-							<c:set var="pageCount" value="${count / pageSize + (count % pageSize == 0 ? 0 : 1)}" />
-							<c:set var="pageBlock" value="${10}" />
-							<c:choose>
-								<c:when test="${currentPage % pageBlock == 0}">
-									<fmt:parseNumber var="result" value="${(currentPage / pageBlock) - 1}" integerOnly="true" />
-									<c:set var="startPage" value="${Math.max(result * pageBlock + 1, 1)}" />
-								</c:when>
-								<c:otherwise>
-									<fmt:parseNumber var="result" value="${currentPage / pageBlock}" integerOnly="true" />
-									<c:set var="startPage" value="${result * pageBlock + 1}" />
-								</c:otherwise>
-							</c:choose>
-							<!-- endPage = 화면에 보여질 마지막 페이지 번호 -->
-							<c:set var="endPage" value="${startPage + pageBlock - 1}" />
-							<c:if test="${endPage > pageCount}">
-								<c:set var="endPage" value="${pageCount}" />
-							</c:if>
-								<!-- 이전 = 10개 이상이면 이전 출력 -->
-								<c:if test="${startPage > 1 }">
-									<a href="memberinfo.do?pageNum=${startPage - 1 }&num=${loginUser.num}">[이전]</a>   
-								</c:if>
-								
-								<!-- 페이징 처리 = 카운터 클릭 시 링크 -->
-								<c:forEach var="i" begin="${startPage }" end="${endPage }">
-									<a href="memberinfo.do?pageNum=${i }&num=${loginUser.num}">[${i}]</a>
-								</c:forEach>
-								
-								<!-- 다음 -->
-								<c:if test="${endPage < pageCount }">
-									<a href="memberinfo.do?pageNum=${startPage + 1 }&num=${loginUser.num}">[다음]</a>   
-								</c:if>
-							</c:if>
-						</p>         
+						        
 					</td>
 				</tr>
 		</table>
